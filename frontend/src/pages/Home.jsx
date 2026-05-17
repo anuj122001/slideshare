@@ -5,9 +5,13 @@ import ClassCard from '../components/ClassCard';
 export default function Home() {
   const [classes, setClasses] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    api.get('/classes').then(({ data }) => setClasses(data)).finally(() => setLoading(false));
+    api.get('/classes')
+      .then(({ data }) => setClasses(data))
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -23,6 +27,10 @@ export default function Home() {
             <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse" />
           ))}
         </div>
+      ) : error ? (
+        <p className="text-center text-red-500 py-20">Could not load classes. Please try again later.</p>
+      ) : classes.length === 0 ? (
+        <p className="text-center text-gray-400 py-20">No classes available yet.</p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {classes.map((cls, i) => (
