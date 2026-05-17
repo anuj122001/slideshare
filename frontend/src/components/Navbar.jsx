@@ -31,12 +31,17 @@ export default function Navbar() {
                     user.role === 'UPLOADER'
                       ? 'bg-brand-100 text-brand-700'
                       : 'bg-gray-100 text-gray-600'
-                  }`}>{user.role}</span>
+                  }`}>{user.role === 'UPLOADER' ? 'Admin' : 'Student'}</span>
                 </span>
                 {user.role === 'UPLOADER' && (
-                  <Link to="/dashboard" className="btn-secondary text-xs px-3 py-1.5">
-                    Dashboard
-                  </Link>
+                  <>
+                    <Link to="/dashboard" className="btn-secondary text-xs px-3 py-1.5">
+                      Dashboard
+                    </Link>
+                    <Link to="/admin/users" className="btn-secondary text-xs px-3 py-1.5">
+                      Manage Users
+                    </Link>
+                  </>
                 )}
                 <button onClick={handleLogout} className="btn-secondary text-xs px-3 py-1.5">
                   Logout

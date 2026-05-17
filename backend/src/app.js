@@ -9,6 +9,7 @@ const errorHandler = require('./middleware/errorHandler');
 const authRoutes     = require('./routes/auth.routes');
 const classRoutes    = require('./routes/class.routes');
 const documentRoutes = require('./routes/document.routes');
+const adminRoutes    = require('./routes/admin.routes');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use(globalLimiter);
 app.use('/auth', authLimiter, authRoutes);
 app.use('/classes',   classRoutes);
 app.use('/documents', documentRoutes);
+app.use('/admin',     adminRoutes);
 
 app.get('/health', (req, res) => res.json({ status: 'ok' }));
 

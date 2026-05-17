@@ -15,14 +15,14 @@ function signRefreshToken(payload) {
 
 async function register(req, res, next) {
   try {
-    const { name, email, password, role } = registerSchema.parse(req.body);
+    const { name, email, password } = registerSchema.parse(req.body);
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) return next(new ApiError(409, 'Email already registered'));
 
     const hashed = await bcrypt.hash(password, 12);
     const user = await prisma.user.create({
-      data: { name, email, password: hashed, role: role || 'VIEWER' },
+      data: { name, email, password: hashed, role: 'VIEWER' },
       select: { id: true, name: true, email: true, role: true },
     });
 

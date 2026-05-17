@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import ClassDetail from './pages/ClassDetail';
 import Dashboard from './pages/Dashboard';
+import AdminUsers from './pages/AdminUsers';
 import Login from './pages/Login';
 import Register from './pages/Register';
 
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/"              element={<Home />} />
           <Route path="/class/:id"     element={<ClassDetail />} />
           <Route path="/dashboard"     element={<RequireUploader><Dashboard /></RequireUploader>} />
+          <Route path="/admin/users"   element={<RequireUploader><AdminUsers /></RequireUploader>} />
           <Route path="/login"         element={<Login />} />
           <Route path="/register"      element={<Register />} />
           <Route path="*"             element={<Navigate to="/" replace />} />

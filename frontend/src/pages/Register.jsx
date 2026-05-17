@@ -6,7 +6,7 @@ export default function Register() {
   const { register } = useAuthStore();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ name: '', email: '', password: '', role: 'VIEWER' });
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,8 +19,8 @@ export default function Register() {
     setError('');
     setLoading(true);
     try {
-      const user = await register(form.name, form.email, form.password, form.role);
-      navigate(user.role === 'UPLOADER' ? '/dashboard' : '/', { replace: true });
+      await register(form.name, form.email, form.password);
+      navigate('/', { replace: true });
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
     } finally {
@@ -33,7 +33,7 @@ export default function Register() {
       <div className="w-full max-w-sm">
         <div className="card">
           <h1 className="text-2xl font-bold text-gray-900 mb-1">Create account</h1>
-          <p className="text-sm text-gray-500 mb-6">Join the document sharing platform</p>
+          <p className="text-sm text-gray-500 mb-6">Join as a student to browse and download documents</p>
 
           {error && (
             <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-4 py-3 mb-4">
@@ -79,13 +79,6 @@ export default function Register() {
                 required
                 minLength={8}
               />
-            </div>
-            <div>
-              <label className="label">Account Type</label>
-              <select name="role" value={form.role} onChange={handleChange} className="input">
-                <option value="VIEWER">Viewer — Browse and download documents</option>
-                <option value="UPLOADER">Uploader — Upload and manage documents</option>
-              </select>
             </div>
             <button type="submit" disabled={loading} className="btn-primary w-full">
               {loading ? 'Creating account…' : 'Create Account'}
