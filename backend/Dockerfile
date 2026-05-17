@@ -13,4 +13,4 @@ COPY src ./src
 
 EXPOSE 4000
 # migrate first, then start — safe to run on every boot (idempotent)
-CMD ["sh", "-c", "npx prisma migrate deploy && node src/server.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && npx prisma db seed && node src/server.js"]
