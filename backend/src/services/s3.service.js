@@ -1,4 +1,4 @@
-const { S3Client, DeleteObjectCommand, GetObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client, DeleteObjectCommand, GetObjectCommand, ListObjectVersionsCommand } = require('@aws-sdk/client-s3');
 const { PutObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 const { aws } = require('../config/env');
@@ -28,12 +28,28 @@ async function createPresignedDownloadUrl(s3Key) {
   return getSignedUrl(s3, command, { expiresIn: 300 });
 }
 
+// Handles both versioned and non-versioned buckets.
+// On a versioned bucket, DeleteObjectCommand only adds a delete marker — we must
+// explicitly delete every version and delete marker to fully remove the object.
 async function deleteObject(s3Key) {
-  const command = new DeleteObjectCommand({
-    Bucket: aws.bucket,
-    Key:    s3Key,
-  });
-  return s3.send(command);
+  const { Versions = [], DeleteMarkers = [] } = await s3.send(
+    new ListObjectVersionsCommand({ Bucket: aws.bucket, Prefix: s3Key })
+  );
+
+  const toDelete = [...Versions, ...DeleteMarkers]
+    .filter((v) => v.Key === s3Key)
+    .map((v) => ({ Key: v.Key, VersionId: v.VersionId }));
+
+  if (toDelete.length === 0) {
+    // Non-versioned bucket or object already gone — single delete is enough
+    return s3.send(new DeleteObjectCommand({ Bucket: aws.bucket, Key: s3Key }));
+  }
+
+  await Promise.all(
+    toDelete.map((obj) =>
+      s3.send(new DeleteObjectCommand({ Bucket: aws.bucket, Key: obj.Key, VersionId: obj.VersionId }))
+    )
+  );
 }
 
 function buildPublicUrl(s3Key) {

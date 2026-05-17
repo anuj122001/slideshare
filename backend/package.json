@@ -10,7 +10,8 @@
     "db:migrate": "npx prisma migrate dev",
     "db:generate": "npx prisma generate",
     "db:seed": "node prisma/seed.js",
-    "db:studio": "npx prisma studio"
+    "db:studio": "npx prisma studio",
+    "sync:s3-db": "node scripts/sync-s3-db.js"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.600.0",
