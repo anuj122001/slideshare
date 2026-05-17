@@ -1,0 +1,59 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String     @id @default(uuid())
+  name      String
+  email     String     @unique
+  password  String
+  role      Role       @default(VIEWER)
+  documents Document[]
+  createdAt DateTime   @default(now())
+}
+
+model Class {
+  id          String     @id @default(uuid())
+  name        String     @unique
+  description String?
+  documents   Document[]
+  createdAt   DateTime   @default(now())
+}
+
+model Document {
+  id         String    @id @default(uuid())
+  title      String
+  s3Key      String
+  s3Url      String
+  fileType   FileType
+  classId    String
+  class      Class     @relation(fields: [classId], references: [id])
+  uploaderId String
+  uploader   User      @relation(fields: [uploaderId], references: [id])
+  deletedAt  DateTime?
+  createdAt  DateTime  @default(now())
+}
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+}
+
+enum Role {
+  UPLOADER
+  VIEWER
+}
+
+enum FileType {
+  PDF
+  PPT
+  NOTES
+}
