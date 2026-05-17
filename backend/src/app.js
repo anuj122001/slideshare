@@ -13,6 +13,9 @@ const adminRoutes    = require('./routes/admin.routes');
 
 const app = express();
 
+// Railway (and most cloud platforms) sit behind a reverse proxy
+app.set('trust proxy', 1);
+
 app.use(helmet());
 app.use(cors({
   origin:      clientOrigin,
