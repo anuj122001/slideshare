@@ -9,6 +9,10 @@ const s3 = new S3Client({
     accessKeyId:     aws.accessKeyId,
     secretAccessKey: aws.secretAccessKey,
   },
+  // SDK v3.600+ adds CRC32 checksum params to presigned PUT URLs by default.
+  // AAAAAA== placeholder never matches real file content → SignatureDoesNotMatch.
+  requestChecksumCalculation: 'WHEN_REQUIRED',
+  responseChecksumValidation: 'WHEN_REQUIRED',
 });
 
 async function createPresignedUploadUrl(s3Key, contentType) {
