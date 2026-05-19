@@ -6,12 +6,14 @@ const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 const DEFAULT_CLASSES = [
-  { name: 'Mathematics',      description: 'Algebra, Calculus, Statistics' },
-  { name: 'Physics',          description: 'Mechanics, Thermodynamics, Optics' },
-  { name: 'Chemistry',        description: 'Organic, Inorganic, Physical Chemistry' },
-  { name: 'Computer Science', description: 'Algorithms, OS, Networks, Databases' },
-  { name: 'Biology',          description: 'Botany, Zoology, Genetics' },
-  { name: 'English',          description: 'Grammar, Literature, Writing' },
+  { name: 'Mathematics',          description: 'Algebra, Calculus, Statistics' },
+  { name: 'Physics',              description: 'Mechanics, Thermodynamics, Optics' },
+  { name: 'Chemistry',            description: 'Organic, Inorganic, Physical Chemistry' },
+  { name: 'Computer Science',     description: 'Algorithms, OS, Networks, Databases' },
+  { name: 'Biology',              description: 'Botany, Zoology, Genetics' },
+  { name: 'English',              description: 'Grammar, Literature, Writing' },
+  { name: 'Education Psychology', description: 'Learning theories, cognitive development, teaching methodologies' },
+  { name: 'Environmental Science', description: 'Ecology, climate change, sustainability, environmental policy' },
 ];
 
 async function main() {
