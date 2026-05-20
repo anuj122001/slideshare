@@ -12,10 +12,20 @@ const TYPE_BADGE = {
 function openViewer(url, fileType) {
   if (fileType === 'PDF') {
     window.open(url, '_blank', 'noopener,noreferrer');
-  } else {
-    const viewer = `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`;
-    window.open(viewer, '_blank', 'noopener,noreferrer');
+    return;
   }
+
+  if (fileType === 'NOTES') {
+    const ext = url.split('?')[0].split('.').pop().toLowerCase();
+    if (ext === 'pdf') {
+      window.open(url, '_blank', 'noopener,noreferrer');
+    } else {
+      window.open(`https://docs.google.com/viewer?url=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer');
+    }
+    return;
+  }
+
+  window.open(`https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(url)}`, '_blank', 'noopener,noreferrer');
 }
 
 export default function DocumentList({ documents, loading }) {
